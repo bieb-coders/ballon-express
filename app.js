@@ -14,6 +14,7 @@ var app = express();
 
 // connect to MongoDB
 var mongoDB = 'mongodb://localhost:27017/ballon-express';
+mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB, {
   useMongoClient: true
 });

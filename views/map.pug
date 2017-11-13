@@ -15,9 +15,9 @@ block content
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
         
-        $.getJSON('/map/maplayers',function(result){
+        $.getJSON('/map/layers',function(result){
             $.each(result, function(i, mlayer){
-                $.getJSON('/map/mapjson/' + mlayer.name, function(data) { addLayer(data, mlayer.name ) });
+                $.getJSON('/map/layers/' + mlayer.name, function(data) { addLayer(data, mlayer.name ) });
             });
         });
   
