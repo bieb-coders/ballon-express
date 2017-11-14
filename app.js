@@ -9,8 +9,12 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var map = require('./routes/map')
 var users = require('./routes/users');
+var ttnconfig = require('./TTNKeys.json');
+var ttn = require('ttn');
 
 var app = express();
+
+const isProduction = 'production' === process.env.NODE_ENV;
 
 // connect to MongoDB
 var mongoDB = 'mongodb://localhost:27017/ballon-express';
@@ -21,6 +25,18 @@ mongoose.connect(mongoDB, {
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+// Connect to TTN to receive and send messages
+ttn.data(ttnconfig.appID, ttnconfig.accessKey)
+  .then(client => {
+    client.on("uplink", function(devId, payload){
+      console.log("Received uplink from: " + devId);
+      console.log("Payload: " + JSON.stringify(payload));
+      console.log("Decoded data: " + JSON.stringify(payload.payload_fields));
+    });
+  })
+  .catch(()=> {
+    console.error.bind(console, 'TTN connection error');
+  });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

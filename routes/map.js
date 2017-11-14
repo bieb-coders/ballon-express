@@ -10,14 +10,11 @@ var GeoJSON = mongoose.model('GeoJSON');
 
 /* GET Map page. */
 router.get('/', function(req,res) {
-    var db = req.db;
-    geoJson.find({},{}).then(function(docs){
-        res.render('map', {
-            "jmap" : docs,
-            lat : 52.632750,
-            lng : 4.74386
-        });
-    }).catch(function(){
+
+    geoJson.find({},{type: 1, id: 1, _id: 0, properties: 1})
+    .then(function(features){
+        res.render('map', {features: features, lat: 52.632750, lng: 4.74386});
+    }).catch(function(error){
         res.status(500);
         res.render('error');
     });
@@ -25,21 +22,26 @@ router.get('/', function(req,res) {
 
 /* GET a list of all layers. */
 router.get('/layers', function (req, res) {
-    geoJson.find({},{name: 1, type: 1})
+    geoJson.find({},{type: 1, id: 1})
         .then(function(docs) {
             res.json(docs);
         })
         .catch(function(error){
             res.status(500);
-            res.json({fout: "Oepsie", bericht: "Er is blijkbaar iets mis gegaan", details: error})
+            res.json({fout: "Oepsie", bericht: "Er is blijkbaar iets mis gegaan", details: error});
         });
 });
 
 /* GET specific layer of type. */
-router.get('/layers/:name', function (req, res) {
-    if (req.params.name) {
-        geoJson.findOne({ name: req.params.name },{}, function (err, docs) {
+router.get('/layers/:name', function(req, res) {
+    if(req.params.name) {
+        geoJson.findOne({id: req.params.name}, {_id: 0})
+        .then(function(docs) {
             res.json(docs);
+        })
+        .catch(function(error) {
+            res.status(500);
+            res.json({fout: "Oepsie", bericht: "Er is blijkbaar iets mis gegaan", details: error});
         });
     }
 });
