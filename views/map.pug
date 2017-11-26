@@ -31,18 +31,14 @@ block content
                         leaf_layer = L.geoJson(layer);
                         leaf_layer.bindPopup(layer.properties.name);
                         leaf_layer.addTo(map); 
-                        // Convert LineString to MultiPoint
-                        layer.geometry.type = "MultiPoint";
-                        layer.id = "points";
-                        layer.properties.name = "Ballon punten";
+                        break;
+                    case 'MultiPoint':
                         leaf_layer = L.geoJson(layer);
                         leaf_layer.bindPopup(layer.properties.name);
                         leaf_layer.addTo(map); 
                         break;
                     default:
-                        leaf_layer = L.geoJson(layer);
-                        leaf_layer.bindPopup(layer.properties.name);
-                        leaf_layer.addTo(map);  
+                        //do noting for other documents in collection 
                 }
             }
             

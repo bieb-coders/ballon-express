@@ -49,7 +49,7 @@ router.get('/layers/:name', function(req, res) {
 router.post('/layers/:name', function (req, res){
     switch(req.params.name) {
         case 'points':
-            console.log('received a point update');
+            console.debug('received a point update');
             // Get the current list of points and add this one as the last
             geoJson.findOne({id: req.params.name}, {}).then(function(points) {
                 var newPoint = req.body;
@@ -59,16 +59,26 @@ router.post('/layers/:name', function (req, res){
                 res.json(updatedPoints);
             }).catch(function(err){
                 res.status(500);
-                res.json({fout: "Oepsie", bericht: "Van dit bericht kan ik snap ik niets", error: err});
+                res.json({fout: "Oepsie", bericht: "Van dit bericht snap ik niets", error: err});
             });
             break;
         case 'lines':
             console.log('received a line update');
-            res.json({status: 'OK'});
+            // Get the current list of points and add this one as the last
+            geoJson.findOne({id: req.params.name}, {}).then(function(points) {
+                var newPoint = req.body;
+                points.geometry.coordinates.push(newPoint);
+                var updatedPoints = new GeoJSON(points);
+                updatedPoints.save();
+                res.json(updatedPoints);
+            }).catch(function(err){
+                res.status(500);
+                res.json({fout: "Oepsie", bericht: "Van dit bericht snap ik niets", error: err});
+            });
             break;
         default:
             res.status(400);
-            res.json({fout: "Oepsie", bericht: "Van dit bericht kan ik snap ik niets"});
+            res.json({fout: "Oepsie", bericht: "Van dit bericht snap ik niets"});
     }
 });
 
