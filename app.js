@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 var index = require('./routes/index');
+var dashboard = require('./routes/dashboard');
 var map = require('./routes/map')
 var users = require('./routes/users');
 var ttnconfig = require('./TTNKeys.json');
@@ -39,7 +40,7 @@ ttn.data(ttnconfig.appID, ttnconfig.accessKey)
   });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -50,6 +51,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/dashboard', dashboard);
 app.use('/map', map);
 app.use('/users', users);
 
