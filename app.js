@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var dashboard = require('./routes/dashboard');
+var graphs = require('./routes/graphs');
 var map = require('./routes/map')
 var users = require('./routes/users');
 var ttnconfig = require('./TTNKeys.json');
@@ -54,6 +55,7 @@ app.use('/', index);
 app.use('/dashboard', dashboard);
 app.use('/map', map);
 app.use('/users', users);
+app.use('/graphs', graphs);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
