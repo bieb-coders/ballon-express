@@ -20,8 +20,8 @@
 #map {
     position: relative;
     width: 100%;
-    height: calc(100% - 60px);
-    margin-top: 70px;
+    height: calc(100% - 15px);
+    margin-top: 15px;
 }
 
 .places-buttons .btn {
@@ -86,4 +86,56 @@
     position:relative;
     margin-left:5px;
     top:-1px
+  }
+
+.row.is-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+.row.is-flex > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+* And with max cross-browser enabled.
+* Nobody should ever write this by hand. 
+* Use a preprocesser with autoprefixing.
+*/
+.row.is-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.row.is-flex > [class*='col-'] {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.mapbox {
+    position: relative;
+    height: 600px;
+  }
+  
+  .mapbox .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  
+  .mapbox .overlay .btn {
+    pointer-events: initial;
   }

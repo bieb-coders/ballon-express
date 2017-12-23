@@ -2,8 +2,8 @@ type = ['', 'info', 'success', 'warning', 'danger'];
 
 
 demo = {
-    initPickColor: function() {
-        $('.pick-class-label').click(function() {
+    initPickColor: function () {
+        $('.pick-class-label').click(function () {
             var new_class = $(this).attr('new-class');
             var old_class = $('#display-buttons').attr('data-class');
             var display_div = $('#display-buttons');
@@ -16,7 +16,7 @@ demo = {
         });
     },
 
-    initDocumentationCharts: function() {
+    initDocumentationCharts: function () {
         /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
 
         dataDailySalesChart = {
@@ -45,7 +45,7 @@ demo = {
         md.startAnimationForLineChart(dailySalesChart);
     },
 
-    initDashboardPageCharts: function() {
+    initDashboardPageCharts: function () {
 
         /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
@@ -131,7 +131,7 @@ demo = {
             ['screen and (max-width: 640px)', {
                 seriesBarDistance: 5,
                 axisX: {
-                    labelInterpolationFnc: function(value) {
+                    labelInterpolationFnc: function (value) {
                         return value[0];
                     }
                 }
@@ -143,8 +143,8 @@ demo = {
         md.startAnimationForBarChart(emailsSubscriptionChart);
 
     },
-
-    initGoogleMaps: function() {
+    /*
+    initGoogleMaps: function () {
         var myLatlng = new google.maps.LatLng(40.748817, -73.985428);
         var mapOptions = {
             zoom: 13,
@@ -247,8 +247,9 @@ demo = {
         // To add the marker to the map, call setMap();
         marker.setMap(map);
     },
+    */
 
-    showNotification: function(from, align) {
+    showNotification: function (from, align) {
         color = Math.floor((Math.random() * 4) + 1);
 
         $.notify({
@@ -256,15 +257,69 @@ demo = {
             message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
 
         }, {
-            type: type[color],
-            timer: 4000,
-            placement: {
-                from: from,
-                align: align
-            }
+                type: type[color],
+                timer: 4000,
+                placement: {
+                    from: from,
+                    align: align
+                }
+            });
+    },
+
+    initLeafletMap: function() {
+        var map = L.map('map').setView([52.63275, 4.74386], 14);
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        $.getJSON('/map/layers', function (result) {
+            $.each(result, function (i, mlayer) {
+              $.getJSON('/map/layers/' + mlayer.id, function (data) {
+                //console.log(data);
+                var leaf_layer;
+                if (data.type == "Feature") {
+                    var geoType = data.geometry.type;
+                    // Kijk naar Geometry type en set de juiste layer
+                    switch(geoType) {
+                        case 'LineString':
+                            leaf_layer = L.geoJson(data);
+                            leaf_layer.bindPopup(data.properties.name);
+                            leaf_layer.addTo(map); 
+                            break;
+                        case 'MultiPoint':
+                            leaf_layer = L.geoJson(data);
+                            leaf_layer.bindPopup(data.properties.name);
+                            leaf_layer.addTo(map); 
+                            break;
+                        default:
+                            //do noting for other documents in collection 
+                    }
+                }
+               });
+            });
         });
+    },
+
+    addLeafletLayer: function(layer, id) {
+            var leaf_layer;
+            if (layer.type == "Feature") {
+                var geoType = layer.geometry.type;
+                // Kijk naar Geometry type en set de juiste layer
+                switch(geoType) {
+                    case 'LineString':
+                        leaf_layer = L.geoJson(layer);
+                        leaf_layer.bindPopup(layer.properties.name);
+                        leaf_layer.addTo(map); 
+                        break;
+                    case 'MultiPoint':
+                        leaf_layer = L.geoJson(layer);
+                        leaf_layer.bindPopup(layer.properties.name);
+                        leaf_layer.addTo(map); 
+                        break;
+                    default:
+                        //do noting for other documents in collection 
+                }
+            }
+        
     }
-
-
-
 }
