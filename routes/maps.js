@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
 
   geoJson.find({},{type: 1, id: 1, _id: 0, properties: 1})
   .then(function(features){
-      res.render('maps', {features: features, lat: 52.632750, lng: 4.74386});
+      res.render('maps', {title: "Map", features: features, lat: 52.632750, lng: 4.74386});
   }).catch(function(error){
       res.status(500);
       res.render('error');

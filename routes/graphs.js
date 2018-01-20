@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('graphs', { title: 'CoderDojo Ballon Express' });
+  res.render('graphs', { title: 'Graphs' });
 });
 
 module.exports = router;

@@ -45,23 +45,23 @@ demo = {
         md.startAnimationForLineChart(dailySalesChart);
     },
 
-    initDashboardPageCharts: function () {
+    initGraphCharts: function () {
 
-        /* ----------==========     Daily Sales Chart initialization    ==========---------- */
+        /* ----------==========     Temeperature Chart    ==========---------- */
 
-        dataDailySalesChart = {
-            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+        dataTemperatureChart = {
+            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
             series: [
-                [12, 17, 7, 17, 23, 18, 38]
+                [2, 2, -4, -3, 0, 1, -1]
             ]
         };
 
-        optionsDailySalesChart = {
+        optionsTemperatureChart = {
             lineSmooth: Chartist.Interpolation.cardinal({
                 tension: 0
             }),
-            low: 0,
-            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            low: -10,
+            high: 20, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
             chartPadding: {
                 top: 0,
                 right: 0,
@@ -70,27 +70,27 @@ demo = {
             },
         }
 
-        var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+        var temperatureChart = new Chartist.Line('#temperatureChart', dataTemperatureChart, optionsTemperatureChart);
 
-        md.startAnimationForLineChart(dailySalesChart);
+        md.startAnimationForLineChart(temperatureChart);
 
 
 
-        /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
+        /* ----------==========     Humidity Chart    ==========---------- */
 
-        dataCompletedTasksChart = {
-            labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
+        dataHumidityChart = {
+            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
             series: [
-                [230, 750, 450, 300, 280, 240, 200, 190]
+                [78, 85, 86, 73, 92, 78, 84, 82]
             ]
         };
 
-        optionsCompletedTasksChart = {
+        optionsHumidityChart = {
             lineSmooth: Chartist.Interpolation.cardinal({
                 tension: 0
             }),
-            low: 0,
-            high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            low: 50,
+            high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
             chartPadding: {
                 top: 0,
                 right: 0,
@@ -99,48 +99,66 @@ demo = {
             }
         }
 
-        var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
+        var humidityChart = new Chartist.Line('#humidityChart', dataHumidityChart, optionsHumidityChart);
 
         // start animation for the Completed Tasks Chart - Line Chart
-        md.startAnimationForLineChart(completedTasksChart);
+        md.startAnimationForLineChart(humidityChart);
 
 
-        /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
+        /* ----------==========     Pressure Chart    ==========---------- */
 
-        var dataEmailsSubscriptionChart = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        var dataPressureChart = {
+            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
             series: [
-                [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+                [780, 850, 860, 730, 920, 780, 840, 820]
 
             ]
         };
-        var optionsEmailsSubscriptionChart = {
-            axisX: {
-                showGrid: false
-            },
-            low: 0,
-            high: 1000,
+        var optionsPressureChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 600,
+            high: 1100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
             chartPadding: {
                 top: 0,
-                right: 5,
+                right: 0,
                 bottom: 0,
                 left: 0
             }
         };
-        var responsiveOptions = [
-            ['screen and (max-width: 640px)', {
-                seriesBarDistance: 5,
-                axisX: {
-                    labelInterpolationFnc: function (value) {
-                        return value[0];
-                    }
-                }
-            }]
-        ];
-        var emailsSubscriptionChart = Chartist.Bar('#emailsSubscriptionChart', dataEmailsSubscriptionChart, optionsEmailsSubscriptionChart, responsiveOptions);
+        
+        var pressureChart = new Chartist.Line('#pressureChart', dataPressureChart, optionsPressureChart);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(emailsSubscriptionChart);
+        md.startAnimationForLineChart(pressureChart);
+
+        /* ----------==========     Speed Chart    ==========---------- */
+
+        dataSpeedChart = {
+            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
+            series: [
+                [15, 17, 23, 11, 7, 5, 2]
+            ]
+        };
+
+        optionsSpeedChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 0,
+            high: 30, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            chartPadding: {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            },
+        }
+
+        var speedChart = new Chartist.Line('#speedChart', dataSpeedChart, optionsSpeedChart);
+
+        md.startAnimationForLineChart(speedChart);
 
     },
     /*
@@ -266,8 +284,8 @@ demo = {
             });
     },
 
-    initLeafletMap: function() {
-        var map = L.map('map').setView([52.63275, 4.74386], 14);
+    initLeafletMap: function(lat, lon, zoom) {
+        var map = L.map('map').setView([lat, lon], zoom);
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);

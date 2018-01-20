@@ -942,11 +942,13 @@ h2.title {
 .main-panel>.content {
     margin-top: 70px;
     padding: 30px 15px;
-    min-height: calc(100% - 123px);
+    min-height: calc(100vh - 80px);
 }
 
 .main-panel>.footer {
     border-top: 1px solid #e7e7e7;
+    height: 70px;
+    margin-top: -70px;
 }
 
 .main-panel>.navbar {
@@ -4948,6 +4950,7 @@ fieldset[disabled] .navbar .btn-link:focus {
     padding: 10px 15px;
     min-width: 130px;
 }
+
 
 footer {
     padding: 15px 0;
