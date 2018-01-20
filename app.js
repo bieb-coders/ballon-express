@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var dashboard = require('./routes/dashboard');
+var maps = require('./routes/maps');
 var map = require('./routes/map')
 var users = require('./routes/users');
 var ttnconfig = require('./TTNKeys.json');
@@ -52,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/dashboard', dashboard);
+app.use('/maps', maps);
 app.use('/map', map);
 app.use('/users', users);
 
