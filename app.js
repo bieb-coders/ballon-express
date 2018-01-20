@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var dashboard = require('./routes/dashboard');
 var graphs = require('./routes/graphs');
+var controls = require('./routes/controls');
 var maps = require('./routes/maps');
 var map = require('./routes/map')
 var users = require('./routes/users');
@@ -58,6 +59,7 @@ app.use('/maps', maps);
 app.use('/map', map);
 app.use('/users', users);
 app.use('/graphs', graphs);
+app.use('/controls', controls);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
