@@ -44,7 +44,9 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row is-flex">
-                        <%- include('partials/map-full') %>
+                        <% balloons.forEach(function(balloon){ %>
+                            <%- include('partials/control-button', {balloon: balloon}); %>
+                        <% }); %>
                     </div>
                 </div>
             </div>
@@ -69,11 +71,17 @@
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/js/demo.js"></script>
 <script type="text/javascript">
+
     $(document).ready(function() {
-        $('.mapbox').css('height', 'calc(100vh - 15px)');
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initLeafletMap(52.63275, 4.74386, 13);
+
+        $('.ballon').on('click', function(e) {
+            e.preventDefault();
+            demo.sendBallonCommand(this, '/controls/ballon');
+            //demo.showNotification('bottom','center','Ballon geknald!');
+            //$(this).toggleClass("active"); //you can list several class names 
+        });
     });
+    
 </script>
 
 </html>

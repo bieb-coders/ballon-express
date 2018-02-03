@@ -267,12 +267,12 @@ demo = {
     },
     */
 
-    showNotification: function (from, align) {
+    showNotification: function (from, align, text) {
         color = Math.floor((Math.random() * 4) + 1);
 
         $.notify({
             icon: "notifications",
-            message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
+            message: text
 
         }, {
                 type: type[color],
@@ -339,5 +339,21 @@ demo = {
                 }
             }
         
+    },
+
+    sendBallonCommand: function (element, urlToSend) {
+        var clickedButton = element;
+        $.ajax({
+            type: "POST",
+            url: urlToSend,
+            dataType: "json",
+            data: { id: clickedButton.id },
+            success: function (result) {
+                demo.showNotification('bottom', 'center', 'Ballon geknald!');
+            },
+            error: function (result) {
+                demo.showNotification('bottom', 'center', 'Bericht niet juist verzonden!');
+            }
+        });
     }
 }
