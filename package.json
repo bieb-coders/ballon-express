@@ -13,6 +13,8 @@
     "debug": "~2.6.9",
     "ejs": "^2.5.7",
     "express": "~4.15.5",
+    "grpc": "^1.8.4",
+    "lora-serialization": "3.0.1",
     "mongodb": "*",
     "mongoose": "*",
     "mongoose-geojson-schema": "^2.1.2",

@@ -44,7 +44,9 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row is-flex">
-                        <%- include('partials/control-button') %>
+                        <% balloons.forEach(function(balloon){ %>
+                            <%- include('partials/control-button', {balloon: balloon}); %>
+                        <% }); %>
                     </div>
                 </div>
             </div>
@@ -64,13 +66,21 @@
 <script src="../assets/js/perfect-scrollbar.jquery.min.js"></script>
 <!--  Notifications Plugin    -->
 <script src="../assets/js/bootstrap-notify.js"></script>
-<!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
 <!-- Material Dashboard javascript methods -->
 <script src="../assets/js/material-dashboard.js?v=1.2.0"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/js/demo.js"></script>
 <script type="text/javascript">
+
+    $(document).ready(function() {
+
+        $('.ballon').on('click', function(e) {
+            e.preventDefault();
+            demo.sendBallonCommand(this, '/controls/ballon');
+            //demo.showNotification('bottom','center','Ballon geknald!');
+            //$(this).toggleClass("active"); //you can list several class names 
+        });
+    });
     
 </script>
 

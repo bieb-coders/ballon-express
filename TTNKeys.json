@@ -1,5 +1,6 @@
 { 
-  "enabled": false,
-  "appID": "ballon-express",
-  "accessKey": "ttn-account-v2.GwdNRhzpXKpPc4oclRSSXbawEdNkuM6fQInHUYfcbLc"
+  "enabled": true,
+  "appID": "plofballon",
+  "accessKey": "ttn-account-v2.bFjAYbEgzSKKxO1rn4zDOlkHwTfIfgj4ItOqXJCKbEE",
+  "mqttUrl": "eu.thethings.network:1883"
 }
