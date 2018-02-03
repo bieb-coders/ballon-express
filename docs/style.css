@@ -7,6 +7,10 @@ html {
     text-align: center;
 }
 .big {font-size: 18px;}
+.title {
+    font-size: 24px;
+    text-align: center;
+}
 /*table*/
 table {width: 100%;}
 .tg  {border-collapse:collapse;border-spacing:0;}
@@ -14,12 +18,5 @@ table {width: 100%;}
 .tg th{padding:10px 6px;overflow:hidden;word-break:normal; border-bottom: 2px solid rgb(180, 180, 180);}
 .tg .tg-met0{font-size:100%;font-family:Verdana !important;;vertical-align:top}
 .tg .tg-3ahz{font-size:100%;font-family:Verdana !important;;vertical-align:top}
-.wc {width:100%; padding: 0px 20px 0px 20px;}
-.btn {
-    padding: 5px;
-	border: 5px #cccccc solid;
-    border-radius: 8px;
-    background-color: rgb(230, 230, 230);
-}
-.btn:hover {background-color: rgb(255, 255, 255);}
-.btn:active {background-color: rgb(160, 160, 160);}
+.wc {width:80%; padding: 0px 20px 0px 20px;}
+.men {width:20%; border-right: 2px solid rgb(180, 180, 180);}
