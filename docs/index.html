@@ -1,32 +1,86 @@
 <!DOCTYPE html>
 <html lang="nl">
-    <head>
-        <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="icon" href="favicon.ico">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <script src="jquery-ui/external/jquery/jquery.js"></script>
-        <script src="jquery-ui/jquery-ui.min.js"></script>
-        <script src="script.js"></script>
-        <script src="jquery.js"></script>
-        <title>Ballon-express</title>
-    </head>
-    <body>
-        <table class="tg">                    
-            <tr>
-                <th class="tg-met0" colspan="2"><p id="header">Ballon-express</p></th>
-            </tr>
-            <tr>
-                <td class="tg-3ahz wc">
-                    <div id="webpagecontent">
-                        <article>
-                            <p id="header">Ballon-express</p>
-                        </article>
+
+<head>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <script src="script.js"></script>
+    <script src="jquery.js"></script>
+    <title>Ballon-express</title>
+    <!-- CP -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!--  Material Dashboard CSS    -->
+    <link href="/assets/css/material-dashboard.css?v=1.2.0" rel="stylesheet" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css">
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="/assets/css/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/weather-icons.min.css">
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" href="http://cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+    <table class="tg">
+        <tr>
+            <th class="tg-met0" colspan="2">
+                <p id="header">Ballon-express</p>
+            </th>
+        </tr>
+        <tr>
+            <td class="tg-3ahz men">
+                <div class="sidebar" data-color="purple" data-image="/assets/img/sidebar-1.jpg">
+                    <div class="logo">
+                        <a href="/" class="simple-text">
+                            CoderDojo Ballon Express
+                        </a>
                     </div>
-                </td>
-            </tr>
-        </table>
-    </body>
+                    <div class="sidebar-wrapper">
+                        <ul class="nav">
+                            <li class="menu">
+                                <a href="/dashboard">
+                                    <i class="material-icons">dashboard</i>
+                                    <p>Dashboard</p>
+                                </a>
+                            </li>
+                            <li class="menu">
+                                <a href="/maps">
+                                    <i class="material-icons">map</i>
+                                    <p>Maps</p>
+                                </a>
+                            </li>
+                            <li class="menu">
+                                <a href="/graphs">
+                                    <i class="material-icons">insert_chart</i>
+                                    <p>Graphs</p>
+                                </a>
+                            </li>
+                            <li class="menu">
+                                <a href="/controls">
+                                    <i class="material-icons">cast_connected</i>
+                                    <p>Controls</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td class="tg-3ahz wc">
+                <div id="webpagecontent">
+                    <article>
+                        <p id="title">Ballon-express</p>
+                    </article>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
 </html>
