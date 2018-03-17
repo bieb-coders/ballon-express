@@ -13,6 +13,7 @@ var controls = require('./routes/controls');
 var maps = require('./routes/maps');
 var map = require('./routes/map')
 var users = require('./routes/users');
+var info = require('./routes/info');
 var ttnconfig = require('./TTNKeys.json');
 var ttn = require('ttn');
 
@@ -63,6 +64,7 @@ app.use('/map', map);
 app.use('/users', users);
 app.use('/graphs', graphs);
 app.use('/controls', controls);
+app.use('/info', info);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
