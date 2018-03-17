@@ -1,3 +1,45 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<script src="/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<h1>Error: <%= error.status %>, <%= message %></h1>
+<h3>Het lijkt erop dat deze pagina niet bestaat ):</h3>
+<p>Probeer één van de onderstaande links:</p>
+<ul>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/maps">Maps</a></li>
+    <li><a href="/graphs">Graphs</a></li>
+    <li><a href="/controls">Controls</a></li>
+    <li><a href="/info">Informatie</a></li>
+</ul><br>
+<p style="cursor:pointer;" id="clicker">Gedetailleerde informatie</p>
+<div id="err" title="Gedetailleerde error-informatie">
+    <pre id="errtext"><%= error.stack %></pre>
+</div>
+<pre id="errtexT"><%= error.stack %></pre>
+<script>
+    $(document).ready(function() {
+        var dwidth = $(window).width()*0.80;
+        var dheight = $('#errtexT').height()+97;
+        $('#errtexT').hide();
+        $("#err").dialog({
+            autoOpen:false,
+            width: dwidth,
+            height: dheight,
+            modal: true,
+            resizable: false,
+            draggable: false,
+            show: {
+                effect: "fade",
+                duration: 500
+            },
+            hide: {
+                effect: "fade",
+                duration: 500
+            }
+        });
+        $("#clicker").on("click",function() {
+            $("#err").dialog("open");
+        });
+    });
+</script>

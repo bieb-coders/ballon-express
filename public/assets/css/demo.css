@@ -141,5 +141,9 @@
 }
 .infoimg {
     width:100%;
-    cursor:pointer;
+    cursor:zoom-in;
+}
+.modalimg {
+    width: 100%;
+    height:100%;
 }

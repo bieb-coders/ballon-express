@@ -63,7 +63,7 @@
         </div>
     </div>
     <div id="imgmodal" title="Onderdelen">
-        <img src="/assets/img/imginfo1.png">
+        <img class="modalimg" src="/assets/img/imginfo1.png">
     </div>
 </body>
 <!--   Core JS Files   -->
@@ -96,11 +96,23 @@
     */
     
     $(document).ready(function() {
+        var dwidth = $(window).width()*0.65;
+        var dheight = $(window).height()*0.84;
         $("#imgmodal").dialog({
             autoOpen:false,
-            width: 1000,
-            height: 650,
-            modal: true
+            width: dwidth   ,
+            height: dheight,
+            modal: true,
+            resizable: false,
+            draggable: false,
+            show: {
+                effect: "fade",
+                duration: 500
+            },
+            hide: {
+                effect: "fade",
+                duration: 500
+            }
         });
         $("#infoimg").on("click",function() {
             $("#imgmodal").dialog("open");
