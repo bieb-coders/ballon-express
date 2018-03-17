@@ -45,15 +45,25 @@
                         <div class="col-lg-12">
                             <p style="font-size:34pt;text-align:center;">Project Ballon-express</p>
                             <br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-7">
                             <article>
                                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae odit voluptatem nostrum repellat natus illum debitis enim aliquid temporibus, voluptatum in rerum vel deleniti rem porro aperiam id numquam aut!</p>
                             </article>
+                        </div>
+                        <div class="col-sm-5">
+                            <img id="infoimg" class="infoimg" src="/assets/img/imginfo1.png" />
                         </div>
                     </div>
                 </div>
             </div>
             <%- include('partials/footer') %>
         </div>
+    </div>
+    <div id="imgmodal" title="Onderdelen">
+        <img src="/assets/img/imginfo1.png">
     </div>
 </body>
 <!--   Core JS Files   -->
@@ -72,6 +82,9 @@
 <script src="/assets/js/material-dashboard.js?v=1.2.0"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="/assets/js/demo.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 <script type="text/javascript">
@@ -83,12 +96,15 @@
     */
     
     $(document).ready(function() {
-
-        // Javascript method's body can be found in assets/js/demos.js
-        //demo.initDashboardPageCharts();
-        demo.initGraphCharts();
-
-
+        $("#imgmodal").dialog({
+            autoOpen:false,
+            width: 1000,
+            height: 650,
+            modal: true
+        });
+        $("#infoimg").on("click",function() {
+            $("#imgmodal").dialog("open");
+        });
     });
 
 </script>

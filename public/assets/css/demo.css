@@ -127,15 +127,19 @@
 .mapbox {
     position: relative;
     height: 600px;
-  }
-  
-  .mapbox .overlay {
+}
+
+.mapbox .overlay {
     position: absolute;
     top: 0;
     left: 0;
     pointer-events: none;
-  }
-  
-  .mapbox .overlay .btn {
+}
+
+.mapbox .overlay .btn {
     pointer-events: initial;
-  }
+}
+.infoimg {
+    width:100%;
+    cursor:pointer;
+}
