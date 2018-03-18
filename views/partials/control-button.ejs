@@ -6,11 +6,11 @@
         </div>
         <div class="card-content">
             <p class="category"><%= balloon.name %></p>
-            <button id="<%= balloon.id %>" type="button" class="btn btn-info ballon">Knal</button>
+            <button id="<%= balloon.id %>" name="<%= balloon.name %>" type="button" class="btn btn-info command">Plof</button>
         </div>
         <div class="card-footer">
             <div class="stats">
-                <i class="material-icons">update</i> Just Updated
+                <i class="material-icons">update</i> <%= (balloon.lastModified > 0) ? balloon.lastModified.toLocaleString() : "never" %>
             </div>
         </div>
     </div>
