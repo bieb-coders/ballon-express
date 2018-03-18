@@ -36,3 +36,7 @@ a {
   margin-left:5px;
   top:-1px
 }
+.infoimg {
+  width:100%;
+  cursor:pointer;
+}
