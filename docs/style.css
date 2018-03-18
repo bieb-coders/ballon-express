@@ -1,0 +1,22 @@
+html {
+    font-family: Verdana;
+    background-color: rgb(250, 250, 250);
+}
+#header {
+    font-size: 30px;
+    text-align: center;
+}
+.big {font-size: 18px;}
+.title {
+    font-size: 24px;
+    text-align: center;
+}
+/*table*/
+table {width: 100%;}
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{overflow:hidden;word-break:normal;}
+.tg th{padding:10px 6px;overflow:hidden;word-break:normal; border-bottom: 2px solid rgb(180, 180, 180);}
+.tg .tg-met0{font-size:100%;font-family:Verdana !important;;vertical-align:top}
+.tg .tg-3ahz{font-size:100%;font-family:Verdana !important;;vertical-align:top}
+.wc {width:80%; padding: 0px 20px 0px 20px;}
+.men {width:20%; border-right: 2px solid rgb(180, 180, 180);}
