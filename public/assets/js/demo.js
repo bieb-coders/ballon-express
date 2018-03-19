@@ -362,6 +362,8 @@ demo = {
             data: { id: clickedButton.id },
             success: function (result) {
                 demo.showNotification('bottom', 'center', clickedButton.name + " " + action, 'success');
+                lastUpdated = new Date(result.lastModified);
+                document.getElementById(result.id + '_updated').textContent = lastUpdated.toLocaleTimeString('nl-NL');
             },
             error: function (result) {
                 demo.showNotification('bottom', 'center', 'Bericht niet juist verzonden!', 'danger');

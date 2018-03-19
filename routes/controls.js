@@ -63,9 +63,7 @@ router.post('/actuator', function(req, res) {
             ttnClient.send('ballon_test2', bytes);
             actuator.lastModified = new Date();
             actuator.save();
-        })
-        .then(function() {
-            res.redirect('/controls');
+            res.json(actuator);
         })
         .catch(function(error){
             res.status(500);

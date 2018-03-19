@@ -10,7 +10,10 @@
         </div>
         <div class="card-footer">
             <div class="stats">
-                <i class="material-icons">update</i> <%= (balloon.lastModified > 0) ? balloon.lastModified.toLocaleString() : "never" %>
+                <i class="material-icons">update</i>
+                <span id="<%= balloon.id + '_updated' %>">
+                    <%= (balloon.lastModified > 0) ? balloon.lastModified.toLocaleTimeString('nl-NL') : "never" %>
+                </span>
             </div>
         </div>
     </div>

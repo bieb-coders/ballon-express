@@ -10,7 +10,10 @@
       </div>
       <div class="card-footer">
           <div class="stats">
-              <i class="material-icons">update</i> <%= (weight.lastModified > 0) ? weight.lastModified.toLocaleString() : "never" %>
+            <i class="material-icons">update</i>
+            <span id="<%= weight.id + '_updated' %>">
+                <%= (weight.lastModified > 0) ? weight.lastModified.toLocaleTimeString('nl-NL') : "never" %>
+            </span>
           </div>
       </div>
   </div>
