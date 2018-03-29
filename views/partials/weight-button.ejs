@@ -1,0 +1,20 @@
+<div class="col-lg-3 col-md-6 col-sm-6">
+  <div class="card card-stats">
+      <div class="card-header" data-background-color="orange">
+          <!--i class="material-icons">content_copy</i-->
+          <i class="material-icons">explore</i>
+      </div>
+      <div class="card-content">
+          <p class="category"><%= weight.name %></p>
+          <button id="<%= weight.id %>" name="<%= weight.name %>" type="button" class="btn btn-info command">Drop</button>
+      </div>
+      <div class="card-footer">
+          <div class="stats">
+            <i class="material-icons">update</i>
+            <span id="<%= weight.id + '_updated' %>">
+                <%= (weight.lastModified > 0) ? weight.lastModified.toLocaleTimeString('nl-NL') : "never" %>
+            </span>
+          </div>
+      </div>
+  </div>
+</div>

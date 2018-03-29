@@ -267,15 +267,15 @@ demo = {
     },
     */
 
-    showNotification: function (from, align, text) {
-        color = Math.floor((Math.random() * 4) + 1);
+    showNotification: function (from, align, text, type) {
+        //color = Math.floor((Math.random() * 4) + 1);
 
         $.notify({
             icon: "notifications",
             message: text
 
         }, {
-                type: type[color],
+                type: type,
                 timer: 4000,
                 placement: {
                     from: from,
@@ -343,16 +343,30 @@ demo = {
 
     sendBallonCommand: function (element, urlToSend) {
         var clickedButton = element;
+        var commandType = clickedButton.id.split('_')[0];
+        var action = "";
+        switch(commandType) {
+            case "ballon":
+                action = "geknald!";
+                break;
+            case "ballast":
+                action = "laten vallen!";
+                break;
+            default:
+                action = "oepsie";
+        }
         $.ajax({
             type: "POST",
             url: urlToSend,
             dataType: "json",
             data: { id: clickedButton.id },
             success: function (result) {
-                demo.showNotification('bottom', 'center', 'Ballon geknald!');
+                demo.showNotification('bottom', 'center', clickedButton.name + " " + action, 'success');
+                lastUpdated = new Date(result.lastModified);
+                document.getElementById(result.id + '_updated').textContent = lastUpdated.toLocaleTimeString('nl-NL');
             },
             error: function (result) {
-                demo.showNotification('bottom', 'center', 'Bericht niet juist verzonden!');
+                demo.showNotification('bottom', 'center', 'Bericht niet juist verzonden!', 'danger');
             }
         });
     }

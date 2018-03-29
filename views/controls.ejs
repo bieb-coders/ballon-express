@@ -48,6 +48,11 @@
                             <%- include('partials/control-button', {balloon: balloon}); %>
                         <% }); %>
                     </div>
+                    <div class="row is-flex">
+                        <% weights.forEach(function(weight){ %>
+                            <%- include('partials/weight-button', {weight: weight}); %>
+                        <% }); %>
+                    </div>
                 </div>
             </div>
             <%- include('partials/footer') %>
@@ -74,12 +79,14 @@
 
     $(document).ready(function() {
 
-        $('.ballon').on('click', function(e) {
+        $('.command').on('click', function(e) {
             e.preventDefault();
-            demo.sendBallonCommand(this, '/controls/ballon');
+            var commandType = this.id.split('_')[0];
+            demo.sendBallonCommand(this, '/controls/actuator');
             //demo.showNotification('bottom','center','Ballon geknald!');
             //$(this).toggleClass("active"); //you can list several class names 
         });
+
     });
     
 </script>
