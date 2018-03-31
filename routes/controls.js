@@ -24,11 +24,16 @@ var ttnClient = new ttn.DataClient(ttnconfig.appID, ttnconfig.accessKey, ttnconf
 ttnClient.on("uplink", function(devId, payload) {
     console.log("Received uplink from: " + devId);
     console.log("Payload: " + JSON.stringify(payload));
-    console.log("Raw data:" + payload.payload_raw);
-    var decoded = lora.decoder.decode(payload.payload_raw, 
-        [lora.decoder.uint8],
-    ["d"]);
-    console.log(JSON.stringify(decoded));
+    console.log("Raw data length:" + payload.payload_raw.length);
+    if (payload.payload_raw.length > 1) {
+        var decoded = lora.decoder.decode(payload.payload_raw, 
+            [lora.decoder.latLng, lora.decoder.uint16, lora.decoder.uint8, lora.decoder.uint8],
+            ["coords", "bat", "h", "m"]);
+        console.log(JSON.stringify(decoded, null, 2));
+    } else {
+        console.log(JSON.stringify(payload.payload_raw, null, 2));
+    }
+    
     //var decoded = lora.decoder.decode(payload.payload_raw, [uint8], ['data']);
 
     //console.log("Decoded data: " + JSON.stringify(decoded));
