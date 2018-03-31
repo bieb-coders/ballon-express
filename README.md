@@ -29,4 +29,3 @@ Next, install all the npm dependencies by running the following command in the p
 * Run the following command in the project folder
 
 | ` $ npm run start`
-
