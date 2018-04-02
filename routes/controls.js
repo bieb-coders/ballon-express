@@ -31,7 +31,9 @@ ttnClient.on("uplink", function(devId, payload) {
             ["coords", "bat", "h", "m"]);
         console.log(JSON.stringify(decoded, null, 2));
     } else {
-        console.log(JSON.stringify(payload.payload_raw, null, 2));
+        var decoded = lora.decoder.decode(payload.payload_raw,
+            [lora.decoder.uint8], ["ctrl"]);
+        console.log(JSON.stringify(payload.payload_raw.data, null, 2));
     }
     
     //var decoded = lora.decoder.decode(payload.payload_raw, [uint8], ['data']);
