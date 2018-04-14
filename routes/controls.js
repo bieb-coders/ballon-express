@@ -3,21 +3,68 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var lora = require('lora-serialization');
 var actuator = require('../models/actuator');
+var sensor = require('../models/sensor');
+var geoJson = require('../models/geojson');
 
 mongoose.Promise = global.Promise;
 
 var Actuator = mongoose.model('Actuator');
+var Sensor = mongoose.model('Sensor');
+var GeoJSON = mongoose.model('GeoJSON');
 
 var ttnconfig = require('../TTNKeys.json');
 var ttn = require('ttn');
 
-//var balloons = Actuator.find({type: 'balloon'});
+function createSensor(type, initValue) {
+    var time = Date.now();
+    var sensor = new Sensor();
+    sensor.lastModified = time;
+    sensor.type = type;
+    sensor.lastValue = initValue;
+    sensor.labels = [time];
+    sensor.series = [initValue];
 
-var weights = [
-    {id: "ballast_1", name: "Ballast 1", data: 6, lastModified: 0},
-    {id: "ballast_2", name: "Ballast 2", data: 7, lastModified: 0},
-    {id: "ballast_3", name: "Ballast 3", data: 8, lastModified: 0}
-]
+    sensor.save();
+}
+
+function updatePoints(coords) {
+    var newCoords = coords.reverse();
+    geoJson.findOne({id: 'points'}, {})
+        .then((points) => {
+            points.geometry.coordinates.push(newCoords);
+            var updatedPoints = new GeoJSON(points);
+            updatedPoints.save();
+        })
+        .catch(error => {
+            console.log("Unable to find points geoJson file");
+        });
+
+    geoJson.findOne({id: 'route'}, {})
+        .then((points) => {
+            points.geometry.coordinates.push(newCoords);
+            var updatedPoints = new GeoJSON(points);
+            updatedPoints.save();
+        })
+        .catch(error => {
+            console.log("Unable to find lines geoJson file");
+        });
+}
+
+function updateSensor(type, value) {
+    sensor.findOne({type: type})
+        .then(sensor => {
+            var time = Date.now();
+            sensor.lastModified = time;
+            sensor.lastValue = value;
+            sensor.labels.push(time);
+            sensor.series.push(value);
+            var updatedSensor = new Sensor(sensor);
+            updatedSensor.save();
+        })
+        .catch(error => {
+            console.log("Unable to update sensor of type "+ type);
+        });
+}
 
 var ttnClient = new ttn.DataClient(ttnconfig.appID, ttnconfig.accessKey, ttnconfig.mqttUrl);
 
@@ -30,10 +77,13 @@ ttnClient.on("uplink", function(devId, payload) {
             [lora.decoder.latLng, lora.decoder.uint16, lora.decoder.uint8, lora.decoder.uint8],
             ["coords", "bat", "h", "m"]);
         console.log(JSON.stringify(decoded, null, 2));
+        updatePoints(decoded.coords);
+        updateSensor("bat", decoded.bat);
+
     } else {
         var decoded = lora.decoder.decode(payload.payload_raw,
             [lora.decoder.uint8], ["ctrl"]);
-        console.log(JSON.stringify(payload.payload_raw.data, null, 2));
+        console.log(payload.payload_raw.toString('utf8'));
     }
     
     //var decoded = lora.decoder.decode(payload.payload_raw, [uint8], ['data']);

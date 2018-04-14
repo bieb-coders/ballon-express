@@ -19,7 +19,6 @@
     "mongoose": "*",
     "mongoose-geojson-schema": "^2.1.2",
     "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5",
     "ttn": "^2.3.1"
   },
