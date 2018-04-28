@@ -74,6 +74,81 @@ demo = {
 
         md.startAnimationForLineChart(temperatureChart);
 
+        /* ----------==========     Battery Chart    ==========---------- */
+
+        var labels = [];
+        var series1 = [];
+        $.getJSON('/graphs/sensors/bat', (data) => {
+            labels = data.labels.map(l => Date.parse(l));
+            series1 = data.series;
+
+            console.log(labels);
+            
+            dataBatteryChart = {
+                labels: labels,
+                series: [
+                    series1
+                ]
+            };
+    
+            optionsBatteryChart = {
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    tension: 0
+                }),
+                low: 0,
+                high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                chartPadding: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                },
+                axisX: {
+                    labelInterpolationFnc: function(value, index) {
+                        return index % 2 === 0 ? moment(value).format('HH:mm') : null;
+                      }
+                }
+            }
+    
+            var batteryChart = new Chartist.Line('#batteryChart', dataBatteryChart, optionsBatteryChart);
+    
+            md.startAnimationForLineChart(batteryChart);
+
+        });
+
+        // $.getJSON('/graphs/sensors/bat')
+        //     .then( data => {
+        //         labels = data.labels;
+        //         series1 = data.series1;
+        //     })
+        //     .catch(
+        //         console.error("Unable to fetch sensor data for battery")
+        //     )
+
+        // dataBatteryChart = {
+        //     labels: labels,
+        //     series: [
+        //         series1
+        //     ]
+        // };
+
+        // optionsBatteryChart = {
+        //     lineSmooth: Chartist.Interpolation.cardinal({
+        //         tension: 0
+        //     }),
+        //     low: 0,
+        //     high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        //     chartPadding: {
+        //         top: 0,
+        //         right: 0,
+        //         bottom: 0,
+        //         left: 0
+        //     },
+        // }
+
+        // var batteryChart = new Chartist.Line('#batteryChart', dataBatteryChart, optionsBatteryChart);
+
+        // md.startAnimationForLineChart(batteryChart);
 
 
         /* ----------==========     Humidity Chart    ==========---------- */

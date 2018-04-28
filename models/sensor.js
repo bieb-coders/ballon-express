@@ -5,8 +5,8 @@ var schema = new Schema({
   _id: {type: Schema.ObjectId, auto: true},
   lastModified: {type: Schema.Types.Date},
   type: {type: Schema.Types.String},
-  labels: {type: Schema.Types.Array},
-  series: {type: Schema.Types.Array},
+  labels: [Schema.Types.Date],
+  series: [Schema.Types.Number],
   lastValue: {type: Schema.Types.Number}
 }, {collection: "sensors"});
 

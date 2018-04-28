@@ -25,8 +25,8 @@ function createSensor(type, initValue) {
     sensor.lastModified = time;
     sensor.type = type;
     sensor.lastValue = initValue;
-    sensor.labels = [time];
-    sensor.series = [initValue];
+    sensor.labels = time;
+    sensor.series = initValue;
 
     promises.push(
         sensor.save()

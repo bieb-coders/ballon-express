@@ -8,6 +8,7 @@
     "start:prod": "cross-env NODE_ENV=production node ./bin/www"
   },
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",

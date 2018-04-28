@@ -5,6 +5,7 @@ var lora = require('lora-serialization');
 var actuator = require('../models/actuator');
 var sensor = require('../models/sensor');
 var geoJson = require('../models/geojson');
+var turf = require('@turf/turf');
 
 mongoose.Promise = global.Promise;
 
@@ -15,35 +16,40 @@ var GeoJSON = mongoose.model('GeoJSON');
 var ttnconfig = require('../TTNKeys.json');
 var ttn = require('ttn');
 
-function createSensor(type, initValue) {
-    var time = Date.now();
-    var sensor = new Sensor();
-    sensor.lastModified = time;
-    sensor.type = type;
-    sensor.lastValue = initValue;
-    sensor.labels = [time];
-    sensor.series = [initValue];
-
-    sensor.save();
-}
-
 function updatePoints(coords) {
     var newCoords = coords.reverse();
+    var dist = 0;
     geoJson.findOne({id: 'points'}, {})
         .then((points) => {
-            points.geometry.coordinates.push(newCoords);
-            var updatedPoints = new GeoJSON(points);
-            updatedPoints.save();
+            //Check distance between last point and new one
+            previousPoint = points.geometry.coordinates[points.geometry.coordinates.length - 1];
+            var from = turf.point(previousPoint);
+            var to = turf.point(newCoords);
+            dist = turf.distance(from, to);
+            //var dist = turf.distance(turf.points(newCoords), turf.point(previousPoint), {units: 'kilometers'});
+            console.info("Distance from previous location: " + dist + "km");
+            if(dist > 0.1) {
+                points.geometry.coordinates.push(newCoords);
+                var updatedPoints = new GeoJSON(points);
+                updatedPoints.save();
+            } else {
+                console.info("Not updating points");
+            }
+            
         })
         .catch(error => {
-            console.log("Unable to find points geoJson file");
+            console.log("Unable to find points geoJson file", error);
         });
 
     geoJson.findOne({id: 'route'}, {})
-        .then((points) => {
-            points.geometry.coordinates.push(newCoords);
-            var updatedPoints = new GeoJSON(points);
-            updatedPoints.save();
+        .then((points) => {        
+             if(dist > 0.1) {
+                 points.geometry.coordinates.push(newCoords);
+                 var updatedPoints = new GeoJSON(points);
+                 updatedPoints.save();
+             } else {
+                 console.info("Not updating route");
+             }
         })
         .catch(error => {
             console.log("Unable to find lines geoJson file");
@@ -51,6 +57,7 @@ function updatePoints(coords) {
 }
 
 function updateSensor(type, value) {
+    console.info(JSON.stringify(value));
     sensor.findOne({type: type})
         .then(sensor => {
             var time = Date.now();
@@ -62,7 +69,7 @@ function updateSensor(type, value) {
             updatedSensor.save();
         })
         .catch(error => {
-            console.log("Unable to update sensor of type "+ type);
+            console.warn("Unable to update sensor of type "+ type);
         });
 }
 
@@ -127,16 +134,5 @@ router.post('/actuator', function(req, res) {
             res.json({message: "Unable to fetch actuator data", error: error});
         });
 });
-/*
-router.post('/ballast', function(req, res) {
-    console.log(req.body);
-    const command = req.body;
-    var weight = weights.find(weight => weight.id === command.id);
-    console.log(weight.data);
-    var bytes = new lora.LoraMessage(lora.encoder).addUint8(weight.data).getBytes();
-    console.log(bytes);
-    ttnClient.send('ballon_test2', bytes);
-    res.json(weight);
-});
-*/
+
 module.exports = router;
