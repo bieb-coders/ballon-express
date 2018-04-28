@@ -95,16 +95,14 @@
     }).addTo(map);
     */
     
-    $(document).ready(function() {
+    $(document).ready(() => {
         var dwidth = $(window).width()*0.65;
         var dheight = $(window).height()*0.84;
         $("#imgmodal").dialog({
-            autoOpen:false,
-            width: dwidth   ,
+            autoOpen: false,
+            width: dwidth,
             height: dheight,
             modal: true,
-            resizable: false,
-            draggable: false,
             show: {
                 effect: "fade",
                 duration: 500

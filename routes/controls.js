@@ -126,6 +126,7 @@ router.post('/actuator', function(req, res) {
             //console.log(bytes);
             ttnClient.send('ballon_test2', bytes);
             actuator.lastModified = new Date();
+            actuator.used = command.used;
             actuator.save();
             res.json(actuator);
         })
