@@ -3,21 +3,75 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var lora = require('lora-serialization');
 var actuator = require('../models/actuator');
+var sensor = require('../models/sensor');
+var geoJson = require('../models/geojson');
+var turf = require('@turf/turf');
 
 mongoose.Promise = global.Promise;
 
 var Actuator = mongoose.model('Actuator');
+var Sensor = mongoose.model('Sensor');
+var GeoJSON = mongoose.model('GeoJSON');
 
 var ttnconfig = require('../TTNKeys.json');
 var ttn = require('ttn');
 
-//var balloons = Actuator.find({type: 'balloon'});
+function updatePoints(coords) {
+    var newCoords = coords.reverse();
+    var dist = 0;
+    geoJson.findOne({id: 'points'}, {})
+        .then((points) => {
+            //Check distance between last point and new one
+            previousPoint = points.geometry.coordinates[points.geometry.coordinates.length - 1];
+            var from = turf.point(previousPoint);
+            var to = turf.point(newCoords);
+            dist = turf.distance(from, to);
+            //var dist = turf.distance(turf.points(newCoords), turf.point(previousPoint), {units: 'kilometers'});
+            console.info("Distance from previous location: " + dist + "km");
+            if(dist > 0.1) {
+                points.geometry.coordinates.push(newCoords);
+                var updatedPoints = new GeoJSON(points);
+                updatedPoints.save();
+            } else {
+                console.info("Not updating points");
+            }
+            
+        })
+        .catch(error => {
+            console.log("Unable to find points geoJson file", error);
+        });
 
-var weights = [
-    {id: "ballast_1", name: "Ballast 1", data: 6, lastModified: 0},
-    {id: "ballast_2", name: "Ballast 2", data: 7, lastModified: 0},
-    {id: "ballast_3", name: "Ballast 3", data: 8, lastModified: 0}
-]
+    geoJson.findOne({id: 'route'}, {})
+        .then((points) => {        
+             if(dist > 0.1) {
+                 points.geometry.coordinates.push(newCoords);
+                 var updatedPoints = new GeoJSON(points);
+                 updatedPoints.save();
+             } else {
+                 console.info("Not updating route");
+             }
+        })
+        .catch(error => {
+            console.log("Unable to find lines geoJson file");
+        });
+}
+
+function updateSensor(type, value) {
+    console.info(JSON.stringify(value));
+    sensor.findOne({type: type})
+        .then(sensor => {
+            var time = Date.now();
+            sensor.lastModified = time;
+            sensor.lastValue = value;
+            sensor.labels.push(time);
+            sensor.series.push(value);
+            var updatedSensor = new Sensor(sensor);
+            updatedSensor.save();
+        })
+        .catch(error => {
+            console.warn("Unable to update sensor of type "+ type);
+        });
+}
 
 var ttnClient = new ttn.DataClient(ttnconfig.appID, ttnconfig.accessKey, ttnconfig.mqttUrl);
 
@@ -30,8 +84,13 @@ ttnClient.on("uplink", function(devId, payload) {
             [lora.decoder.latLng, lora.decoder.uint16, lora.decoder.uint8, lora.decoder.uint8],
             ["coords", "bat", "h", "m"]);
         console.log(JSON.stringify(decoded, null, 2));
+        updatePoints(decoded.coords);
+        updateSensor("bat", decoded.bat);
+
     } else {
-        console.log(JSON.stringify(payload.payload_raw, null, 2));
+        var decoded = lora.decoder.decode(payload.payload_raw,
+            [lora.decoder.uint8], ["ctrl"]);
+        console.log(payload.payload_raw.toString('utf8'));
     }
     
     //var decoded = lora.decoder.decode(payload.payload_raw, [uint8], ['data']);
@@ -75,16 +134,5 @@ router.post('/actuator', function(req, res) {
             res.json({message: "Unable to fetch actuator data", error: error});
         });
 });
-/*
-router.post('/ballast', function(req, res) {
-    console.log(req.body);
-    const command = req.body;
-    var weight = weights.find(weight => weight.id === command.id);
-    console.log(weight.data);
-    var bytes = new lora.LoraMessage(lora.encoder).addUint8(weight.data).getBytes();
-    console.log(bytes);
-    ttnClient.send('ballon_test2', bytes);
-    res.json(weight);
-});
-*/
+
 module.exports = router;
