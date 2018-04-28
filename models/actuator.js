@@ -7,7 +7,8 @@ var schema = new Schema({
   name: {type: Schema.Types.String},
   data: {type: Schema.Types.Number},
   lastModified: {type: Schema.Types.Date},
-  type: {type: Schema.Types.String}
+  type: {type: Schema.Types.String},
+  used: {type: Schema.Types.Boolean, default: false}
 }, {collection: "actuators"});
 
 module.exports = mongoose.model('Actuator', schema);

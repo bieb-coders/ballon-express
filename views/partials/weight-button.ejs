@@ -6,7 +6,8 @@
       </div>
       <div class="card-content">
           <p class="category"><%= weight.name %></p>
-          <button id="<%= weight.id %>" name="<%= weight.name %>" type="button" class="btn btn-info command">Drop</button>
+          <button id="<%= weight.id %>" name="<%= weight.name %>" type="button" class="btn btn-info command" 
+            <%= (weight.used) ? "disabled" : "" %> >Drop</button>
       </div>
       <div class="card-footer">
           <div class="stats">

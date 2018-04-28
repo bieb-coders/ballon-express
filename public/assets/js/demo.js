@@ -16,78 +16,45 @@ demo = {
         });
     },
 
-    initDocumentationCharts: function () {
-        /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
-
-        dataDailySalesChart = {
-            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-            series: [
-                [12, 17, 7, 17, 23, 18, 38]
-            ]
-        };
-
-        optionsDailySalesChart = {
-            lineSmooth: Chartist.Interpolation.cardinal({
-                tension: 0
-            }),
-            low: 0,
-            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-            chartPadding: {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            },
-        }
-
-        var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
-
-        md.startAnimationForLineChart(dailySalesChart);
-    },
-
     initGraphCharts: function () {
 
         /* ----------==========     Temeperature Chart    ==========---------- */
 
-        dataTemperatureChart = {
-            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
-            series: [
-                [2, 2, -4, -3, 0, 1, -1]
-            ]
-        };
-
-        optionsTemperatureChart = {
-            lineSmooth: Chartist.Interpolation.cardinal({
-                tension: 0
-            }),
-            low: -10,
-            high: 20, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-            chartPadding: {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
-            },
-        }
-
-        var temperatureChart = new Chartist.Line('#temperatureChart', dataTemperatureChart, optionsTemperatureChart);
-
-        md.startAnimationForLineChart(temperatureChart);
+        $.getJSON('/graphs/sensors/temp', (data) => {
+            dataTemperatureChart = {
+                labels: data.labels,
+                series: [
+                    data.series
+                ]
+            };
+    
+            optionsTemperatureChart = {
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    tension: 0
+                }),
+                low: -10,
+                high: 20, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                chartPadding: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                },
+            }
+    
+            var temperatureChart = new Chartist.Line('#temperatureChart', dataTemperatureChart, optionsTemperatureChart);
+    
+            md.startAnimationForLineChart(temperatureChart);
+        });
 
         /* ----------==========     Battery Chart    ==========---------- */
 
-        var labels = [];
-        var series1 = [];
         $.getJSON('/graphs/sensors/bat', (data) => {
-            labels = data.labels.map(l => Date.parse(l));
-            series1 = data.series;
-
-            console.log(labels);
             
             dataBatteryChart = {
-                labels: labels,
+                labels: data.labels.map(l => Date.parse(l)),
                 series: [
-                    series1
+                    data.series
                 ]
             };
     
@@ -116,69 +83,36 @@ demo = {
 
         });
 
-        // $.getJSON('/graphs/sensors/bat')
-        //     .then( data => {
-        //         labels = data.labels;
-        //         series1 = data.series1;
-        //     })
-        //     .catch(
-        //         console.error("Unable to fetch sensor data for battery")
-        //     )
-
-        // dataBatteryChart = {
-        //     labels: labels,
-        //     series: [
-        //         series1
-        //     ]
-        // };
-
-        // optionsBatteryChart = {
-        //     lineSmooth: Chartist.Interpolation.cardinal({
-        //         tension: 0
-        //     }),
-        //     low: 0,
-        //     high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-        //     chartPadding: {
-        //         top: 0,
-        //         right: 0,
-        //         bottom: 0,
-        //         left: 0
-        //     },
-        // }
-
-        // var batteryChart = new Chartist.Line('#batteryChart', dataBatteryChart, optionsBatteryChart);
-
-        // md.startAnimationForLineChart(batteryChart);
-
 
         /* ----------==========     Humidity Chart    ==========---------- */
 
-        dataHumidityChart = {
-            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
-            series: [
-                [78, 85, 86, 73, 92, 78, 84, 82]
-            ]
-        };
-
-        optionsHumidityChart = {
-            lineSmooth: Chartist.Interpolation.cardinal({
-                tension: 0
-            }),
-            low: 50,
-            high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-            chartPadding: {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
+        $.getJSON('/graphs/sensors/hum', (data)=> {
+            dataHumidityChart = {
+                labels: data.labels,
+                series: [
+                    data.series
+                ]
+            };
+    
+            optionsHumidityChart = {
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    tension: 0
+                }),
+                low: 50,
+                high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                chartPadding: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                }
             }
-        }
-
-        var humidityChart = new Chartist.Line('#humidityChart', dataHumidityChart, optionsHumidityChart);
-
-        // start animation for the Completed Tasks Chart - Line Chart
-        md.startAnimationForLineChart(humidityChart);
-
+    
+            var humidityChart = new Chartist.Line('#humidityChart', dataHumidityChart, optionsHumidityChart);
+    
+            // start animation for the Completed Tasks Chart - Line Chart
+            md.startAnimationForLineChart(humidityChart);
+        });
 
         /* ----------==========     Pressure Chart    ==========---------- */
 
@@ -434,7 +368,7 @@ demo = {
             type: "POST",
             url: urlToSend,
             dataType: "json",
-            data: { id: clickedButton.id },
+            data: { id: clickedButton.id, used: true },
             success: function (result) {
                 demo.showNotification('bottom', 'center', clickedButton.name + " " + action, 'success');
                 lastUpdated = new Date(result.lastModified);

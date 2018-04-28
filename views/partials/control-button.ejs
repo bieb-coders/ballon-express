@@ -6,7 +6,8 @@
         </div>
         <div class="card-content">
             <p class="category"><%= balloon.name %></p>
-            <button id="<%= balloon.id %>" name="<%= balloon.name %>" type="button" class="btn btn-info command">Plof</button>
+            <button id="<%= balloon.id %>" name="<%= balloon.name %>" type="button" class="btn btn-info command"
+                <%= (balloon.used) ? "disabled" : "" %> >Plof</button>
         </div>
         <div class="card-footer">
             <div class="stats">
