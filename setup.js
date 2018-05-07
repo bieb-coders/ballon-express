@@ -16,17 +16,17 @@ var actuatorsDone = false;
 var sensorsDone = false;
 
 // Change this if we have more sensors and/or actuators
-var sensortypes = ["bat", "hum", "temp"];
+var sensortypes = ["bat", "hum", "temp", "press", "light", "accl", "mag"];
 var actuatortypes = [{type: "balloon", prefix: "Ballon", count: 6}, {type: "weight", prefix: "Ballast", count: 3}];
 
 function createSensor(type, initValue) {
     var time = Date.now();
     var sensor = new Sensor();
-    sensor.lastModified = time;
+    //sensor.lastModified = time;
     sensor.type = type;
-    sensor.lastValue = initValue;
-    sensor.labels = time;
-    sensor.series = initValue;
+    //sensor.lastValue = initValue;
+    //sensor.labels = time;
+    //sensor.series = initValue;
 
     promises.push(
         sensor.save()
