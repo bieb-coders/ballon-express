@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="card-content">
                                     <p class="category">Temperatuur</p>
-                                    <h3 class="title">-6
+                                    <h3 class="title"><%= sensors.find(s => s.type === "temp").lastValue %>
                                         <small>&#8451;</small>
                                     </h3>
                                 </div>
@@ -64,11 +64,11 @@
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="card card-stats">
                                 <div class="card-header" data-background-color="green">
-                                    <i class="wi wi-humidity"></i>
+                                    <i class="material-icons">battery_full</i>
                                 </div>
                                 <div class="card-content">
-                                    <p class="category">Luchtvochtigheid</p>
-                                    <h3 class="title">68 %</h3>
+                                    <p class="category">Batterij</p>
+                                    <h3 class="title"><%= sensors.find(s => s.type === "bat").lastValue %> %</h3>
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="card-content">
                                     <p class="category">Luchtdruk</p>
-                                    <h3 class="title">975 mbar</h3>
+                                    <h3 class="title"><%= sensors.find(s => s.type === "press").lastValue %> mbar</h3>
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
@@ -119,11 +119,11 @@
                                 </div>
                                 <div class="card-content">
                                     <h4 class="title">Batterij</h4>
-                                    <p class="category"><%= sensors[0].lastValue %> %</p>
+                                    <p class="category"><%= sensors.find(s => s.type === "bat").lastValue %> %</p>
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <i class="material-icons">access_time</i> <%= sensors[0].lastModified %>
+                                        <i class="material-icons">access_time</i> <%= sensors.find(s => s.type === "bat").lastModified %>
                                     </div>
                                 </div>
                             </div>
@@ -153,12 +153,11 @@
                                 </div>
                                 <div class="card-content">
                                     <h4 class="title">Tempertatuur</h4>
-                                    <p class="category">
-                                        <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
+                                    <p class="category"><%= sensors.find(s => s.type === "temp").lastValue %> &#8451;</p>
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <i class="material-icons">access_time</i> updated 4 minutes ago
+                                        <i class="material-icons">access_time</i><%= sensors.find(s => s.type === "temp").lastModified %>
                                     </div>
                                 </div>
                             </div>
@@ -188,11 +187,11 @@
                                 </div>
                                 <div class="card-content">
                                     <h4 class="title">Luchtdruk</h4>
-                                    <p class="category">-- hier komt ook iets te staan --</p>
+                                    <p class="category"><%= sensors.find(s => s.type === "press").lastValue %></p>
                                 </div>
                                 <div class="card-footer">
                                     <div class="stats">
-                                        <i class="material-icons">access_time</i> updated 4 minutes ago
+                                        <i class="material-icons">access_time</i><%= sensors.find(s => s.type === "press").lastModified %>
                                     </div>
                                 </div>
                             </div>
@@ -242,20 +241,9 @@
 
 
 <script type="text/javascript">
-    /*
-    var map = L.map('map').setView([52.63275, 4.74386], 14);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    */
     
-    $(document).ready(function() {
-
-        // Javascript method's body can be found in assets/js/demos.js
-        //demo.initDashboardPageCharts();
+    $(document).ready(() => {
         demo.initGraphCharts();
-
-
     });
 
 </script>
