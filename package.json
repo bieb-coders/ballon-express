@@ -14,6 +14,7 @@
     "debug": "~2.6.9",
     "ejs": "^2.5.7",
     "express": "~4.15.5",
+    "express-session": "^1.15.6",
     "grpc": "^1.8.4",
     "lora-serialization": "3.0.1",
     "mongodb": "*",
@@ -21,6 +22,7 @@
     "mongoose-geojson-schema": "^2.1.2",
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "serve-favicon": "~2.4.5",
     "ttn": "^2.3.1"
   },

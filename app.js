@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var Strategy = require('passport-local').Strategy;
+var db = require('./db');
 
 var index = require('./routes/index');
 var dashboard = require('./routes/dashboard');
@@ -14,8 +17,30 @@ var maps = require('./routes/maps');
 var map = require('./routes/map')
 var users = require('./routes/users');
 var info = require('./routes/info');
+var login = require('./routes/login');
 var ttnconfig = require('./TTNKeys.json');
 var ttn = require('ttn');
+
+passport.use(new Strategy(
+  function(username, password, cb) {
+    db.users.findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      if (user.password != password) { return cb(null, false); }
+      return cb(null, user);
+    });
+}));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  db.users.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
 
 var app = express();
 
@@ -56,6 +81,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 app.use('/dashboard', dashboard);
@@ -65,6 +94,7 @@ app.use('/users', users);
 app.use('/graphs', graphs);
 app.use('/controls', controls);
 app.use('/info', info);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
