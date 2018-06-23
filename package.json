@@ -20,6 +20,7 @@
     "mongoose": "*",
     "mongoose-geojson-schema": "^2.1.2",
     "morgan": "~1.9.0",
+    "passport": "^0.4.0",
     "serve-favicon": "~2.4.5",
     "ttn": "^2.3.1"
   },

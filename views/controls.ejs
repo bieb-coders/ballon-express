@@ -83,10 +83,11 @@
             e.preventDefault();
             var commandType = this.id.split('_')[0];
             demo.sendBallonCommand(this, '/controls/actuator');
+            $(this).attr("disabled","");
+            $(this).attr("class","btn btn-disabled");
             //demo.showNotification('bottom','center','Ballon geknald!');
             //$(this).toggleClass("active"); //you can list several class names 
         });
-
     });
     
 </script>
