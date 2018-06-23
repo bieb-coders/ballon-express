@@ -16,19 +16,27 @@ var GeoJSON = mongoose.model('GeoJSON');
 var ttnconfig = require('../TTNKeys.json');
 var ttn = require('ttn');
 
-function updatePoints(coords) {
+function updatePoints(coords, time) {
     var newCoords = coords.reverse();
     var dist = 0;
     geoJson.findOne({id: 'points'}, {})
         .then((points) => {
-            //Check distance between last point and new one
-            previousPoint = points.geometry.coordinates[points.geometry.coordinates.length - 1];
-            var from = turf.point(previousPoint);
-            var to = turf.point(newCoords);
-            dist = turf.distance(from, to);
+            // Don't calculate distance for first point received
+            if (points.geometry.coordinates.length > 0) {
+                previousPoint = points.geometry.coordinates[points.geometry.coordinates.length - 1];
+                var from = turf.point(previousPoint);
+                var to = turf.point(newCoords);
+                dist = turf.distance(from, to);
+            }
+            
             //var dist = turf.distance(turf.points(newCoords), turf.point(previousPoint), {units: 'kilometers'});
             console.info("Distance from previous location: " + dist + "km");
             if(dist > 0.1) {
+                points.geometry.coordinates.push(newCoords);
+                var updatedPoints = new GeoJSON(points);
+                updatedPoints.save();
+            } else if (points.geometry.coordinates.length == 0) {
+                console.info("Adding first coordinates");
                 points.geometry.coordinates.push(newCoords);
                 var updatedPoints = new GeoJSON(points);
                 updatedPoints.save();
@@ -44,11 +52,16 @@ function updatePoints(coords) {
     geoJson.findOne({id: 'route'}, {})
         .then((points) => {        
              if(dist > 0.1) {
-                 points.geometry.coordinates.push(newCoords);
-                 var updatedPoints = new GeoJSON(points);
-                 updatedPoints.save();
+                points.geometry.coordinates.push(newCoords);
+                var updatedPoints = new GeoJSON(points);
+                updatedPoints.save();
+             } else if (points.geometry.coordinates.length == 0) {
+                console.info("Adding first coordinates");
+                points.geometry.coordinates.push(newCoords);
+                var updatedPoints = new GeoJSON(points);
+                updatedPoints.save();
              } else {
-                 console.info("Not updating route");
+                console.info("Not updating route");
              }
         })
         .catch(error => {
@@ -56,11 +69,10 @@ function updatePoints(coords) {
         });
 }
 
-function updateSensor(type, value) {
+function updateSensor(type, value, time) {
     console.info(JSON.stringify(value));
     sensor.findOne({type: type})
         .then(sensor => {
-            var time = Date.now();
             sensor.lastModified = time;
             sensor.lastValue = value;
             sensor.labels.push(time);
@@ -81,11 +93,43 @@ ttnClient.on("uplink", function(devId, payload) {
     console.log("Raw data length:" + payload.payload_raw.length);
     if (payload.payload_raw.length > 1) {
         var decoded = lora.decoder.decode(payload.payload_raw, 
-            [lora.decoder.latLng, lora.decoder.uint16, lora.decoder.uint8, lora.decoder.uint8],
-            ["coords", "bat", "h", "m"]);
+        [
+            lora.decoder.latLng,
+            lora.decoder.temperature,
+            lora.decoder.temperature,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint16,
+            lora.decoder.uint8, 
+            lora.decoder.uint8
+        ],[
+            "coords", 
+             "temp",
+             "press",
+             "xaccl",
+             "yaccl",
+             "zaccl",
+             "xmag",
+             "ymag",
+             "zmag",
+             "light",
+             "bat",
+             "h",
+             "m"
+        ]);
         console.log(JSON.stringify(decoded, null, 2));
-        updatePoints(decoded.coords);
-        updateSensor("bat", decoded.bat);
+        var time = new Date();
+        time.setHours(decoded.h, decoded.m, 0, 0);
+        updatePoints(decoded.coords, time);
+        updateSensor("temp", decoded.temp, time);
+        updateSensor("press", decoded.press, time);
+        updateSensor("light", decoded.light, time);
+        updateSensor("bat", decoded.bat, time);
 
     } else {
         var decoded = lora.decoder.decode(payload.payload_raw,
@@ -100,10 +144,10 @@ ttnClient.on("uplink", function(devId, payload) {
 });
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     var actuators = [
-        Actuator.find({type: "balloon"}).exec(),
-        Actuator.find({type: "weight"}).exec()
+        Actuator.find({type: "balloon"}).sort({id: 1}).exec(),
+        Actuator.find({type: "weight"}).sort({id: 1}).exec()
     ];
 
     Promise.all(actuators).then(function(results) {

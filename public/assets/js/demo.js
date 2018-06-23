@@ -32,14 +32,19 @@ demo = {
                 lineSmooth: Chartist.Interpolation.cardinal({
                     tension: 0
                 }),
-                low: -10,
-                high: 20, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                low: Math.floor(Math.min(...data.series) * 0.9),
+                high: Math.floor(Math.max(...data.series) * 1.1), // creative tim: we recommend you to set the high sa the biggest value + something for a better look
                 chartPadding: {
                     top: 0,
                     right: 0,
                     bottom: 0,
                     left: 0
                 },
+                axisX: {
+                    labelInterpolationFnc: (value, index) => {
+                        return index % 2 === 0 ? moment(value).format('HH:mm') : null;
+                    }
+                }
             }
     
             var temperatureChart = new Chartist.Line('#temperatureChart', dataTemperatureChart, optionsTemperatureChart);
@@ -63,7 +68,7 @@ demo = {
                     tension: 0
                 }),
                 low: 0,
-                high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                high: Math.floor(Math.max(...data.series) * 1.1), // creative tim: we recommend you to set the high sa the biggest value + something for a better look
                 chartPadding: {
                     top: 0,
                     right: 0,
@@ -71,7 +76,7 @@ demo = {
                     left: 0
                 },
                 axisX: {
-                    labelInterpolationFnc: function(value, index) {
+                    labelInterpolationFnc: (value, index) => {
                         return index % 2 === 0 ? moment(value).format('HH:mm') : null;
                       }
                 }
@@ -116,32 +121,39 @@ demo = {
 
         /* ----------==========     Pressure Chart    ==========---------- */
 
-        var dataPressureChart = {
-            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'],
-            series: [
-                [780, 850, 860, 730, 920, 780, 840, 820]
-
-            ]
-        };
-        var optionsPressureChart = {
-            lineSmooth: Chartist.Interpolation.cardinal({
-                tension: 0
-            }),
-            low: 600,
-            high: 1100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-            chartPadding: {
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0
+        $.getJSON('/graphs/sensors/press', (data) => {
+            
+            dataPressureChart = {
+                labels: data.labels.map(l => Date.parse(l)),
+                series: [
+                    data.series
+                ]
+            };
+    
+            optionsPressureChart = {
+                lineSmooth: Chartist.Interpolation.cardinal({
+                    tension: 0
+                }),
+                low: Math.floor(Math.min(...data.series) * 0.9),
+                high: Math.floor(Math.max(...data.series) * 1.1), // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                chartPadding: {
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0
+                },
+                axisX: {
+                    labelInterpolationFnc: (value, index) => {
+                        return index % 2 === 0 ? moment(value).format('HH:mm') : null;
+                      }
+                }
             }
-        };
-        
-        var pressureChart = new Chartist.Line('#pressureChart', dataPressureChart, optionsPressureChart);
+    
+            var pressureChart = new Chartist.Line('#pressureChart', dataPressureChart, optionsPressureChart);
+    
+            md.startAnimationForLineChart(pressureChart);
 
-        //start animation for the Emails Subscription Chart
-        md.startAnimationForLineChart(pressureChart);
-
+        });
         /* ----------==========     Speed Chart    ==========---------- */
 
         dataSpeedChart = {
@@ -170,111 +182,6 @@ demo = {
         md.startAnimationForLineChart(speedChart);
 
     },
-    /*
-    initGoogleMaps: function () {
-        var myLatlng = new google.maps.LatLng(40.748817, -73.985428);
-        var mapOptions = {
-            zoom: 13,
-            center: myLatlng,
-            scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
-            styles: [{
-                "featureType": "water",
-                "stylers": [{
-                    "saturation": 43
-                }, {
-                    "lightness": -11
-                }, {
-                    "hue": "#0088ff"
-                }]
-            }, {
-                "featureType": "road",
-                "elementType": "geometry.fill",
-                "stylers": [{
-                    "hue": "#ff0000"
-                }, {
-                    "saturation": -100
-                }, {
-                    "lightness": 99
-                }]
-            }, {
-                "featureType": "road",
-                "elementType": "geometry.stroke",
-                "stylers": [{
-                    "color": "#808080"
-                }, {
-                    "lightness": 54
-                }]
-            }, {
-                "featureType": "landscape.man_made",
-                "elementType": "geometry.fill",
-                "stylers": [{
-                    "color": "#ece2d9"
-                }]
-            }, {
-                "featureType": "poi.park",
-                "elementType": "geometry.fill",
-                "stylers": [{
-                    "color": "#ccdca1"
-                }]
-            }, {
-                "featureType": "road",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#767676"
-                }]
-            }, {
-                "featureType": "road",
-                "elementType": "labels.text.stroke",
-                "stylers": [{
-                    "color": "#ffffff"
-                }]
-            }, {
-                "featureType": "poi",
-                "stylers": [{
-                    "visibility": "off"
-                }]
-            }, {
-                "featureType": "landscape.natural",
-                "elementType": "geometry.fill",
-                "stylers": [{
-                    "visibility": "on"
-                }, {
-                    "color": "#b8cb93"
-                }]
-            }, {
-                "featureType": "poi.park",
-                "stylers": [{
-                    "visibility": "on"
-                }]
-            }, {
-                "featureType": "poi.sports_complex",
-                "stylers": [{
-                    "visibility": "on"
-                }]
-            }, {
-                "featureType": "poi.medical",
-                "stylers": [{
-                    "visibility": "on"
-                }]
-            }, {
-                "featureType": "poi.business",
-                "stylers": [{
-                    "visibility": "simplified"
-                }]
-            }]
-
-        }
-        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            title: "Hello World!"
-        });
-
-        // To add the marker to the map, call setMap();
-        marker.setMap(map);
-    },
-    */
 
     showNotification: function (from, align, text, type) {
         //color = Math.floor((Math.random() * 4) + 1);
