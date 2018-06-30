@@ -145,6 +145,7 @@ ttnClient.on("uplink", function(devId, payload) {
 
 /* GET home page. */
 router.get('/', (req, res) => {
+    console.log(req.user);
     var actuators = [
         Actuator.find({type: "balloon"}).sort({id: 1}).exec(),
         Actuator.find({type: "weight"}).sort({id: 1}).exec()
@@ -152,7 +153,7 @@ router.get('/', (req, res) => {
 
     Promise.all(actuators).then(function(results) {
         //console.log(results);
-        res.render('controls', {title: "Controls", balloons: results[0], weights: results[1]});
+        res.render('controls', {title: "Controls", balloons: results[0], weights: results[1], user: req.user});
     }).catch(function(error){
         res.status(500);
         res.render('error', {error: error, message: "Unable to get actuators from MongoDB"});

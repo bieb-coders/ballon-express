@@ -27,9 +27,6 @@
 <body>
     <div class="wrapper">
         <%- include('partials/sidebar') %>
-        <% if (!user) { %>
-            document.getElementById("loginModal").style.display = "fixed";
-        <% }%>
         <div class="main-panel">
             <nav class="navbar navbar-transparent navbar-absolute">
                 <div class="container-fluid">
@@ -60,25 +57,27 @@
             </div>
             <%- include('partials/footer') %>
         </div>
-    </div>
-    <div id="loginModal" style="display:none;">
-        <form action="/login" method="post">
-            <div>
-            <label>Username:</label>
-            <input type="text" name="username"/><br/>
-            </div>
-            <div>
-            <label>Password:</label>
-            <input type="password" name="password"/>
-            </div>
-            <div>
-            <input type="submit" value="Submit"/>
-            </div>
-        </form>
+        <div id="loginModal" title="Login">
+            <form action="/login" method="post">
+                <div>
+                <label>Username:</label>
+                <input type="text" name="username"/><br/>
+                </div>
+                <div>
+                <label>Password:</label>
+                <input type="password" name="password"/>
+                </div>
+                <div>
+                <input type="submit" value="Submit"/>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 <!--   Core JS Files   -->
 <script src="../assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="../assets/js/material.min.js" type="text/javascript"></script>
 <!--  Charts Plugin -->
@@ -105,8 +104,19 @@
             $(this).attr("class","btn btn-disabled");
             //demo.showNotification('bottom','center','Ballon geknald!');
             //$(this).toggleClass("active"); //you can list several class names
-            if(demo.getQueryVariable("login") == "failed") {document.getElementById('loginModal').style.display = "fixed";}
         });
+        $('#loginModal').dialog({
+            autoOpen: false,
+            closeOnEscape: false,
+            draggable: false,
+            resizable: false,
+            modal: true,
+            open: function(event, ui) {
+                $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+            }
+        });
+        if(demo.getQueryVariable("login") == "failed") {$('#loginModal').dialog("open")}
+        if(typeof user == "undefined") {$('#loginModal').dialog("open")}
     });
     
 </script>
