@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
-var db = require('./db');
+var users = require('./db/users');
 
 var index = require('./routes/index');
 var dashboard = require('./routes/dashboard');
@@ -15,7 +15,6 @@ var graphs = require('./routes/graphs');
 var controls = require('./routes/controls');
 var maps = require('./routes/maps');
 var map = require('./routes/map')
-var users = require('./routes/users');
 var info = require('./routes/info');
 var login = require('./routes/login');
 var ttnconfig = require('./TTNKeys.json');
@@ -23,7 +22,7 @@ var ttn = require('ttn');
 
 passport.use(new Strategy(
   function(username, password, cb) {
-    db.users.findByUsername(username, function(err, user) {
+    users.findByUsername(username, function(err, user) {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
@@ -36,7 +35,7 @@ passport.serializeUser(function(user, cb) {
 });
 
 passport.deserializeUser(function(id, cb) {
-  db.users.findById(id, function (err, user) {
+  users.findById(id, function (err, user) {
     if (err) { return cb(err); }
     cb(null, user);
   });
@@ -90,7 +89,6 @@ app.use('/', index);
 app.use('/dashboard', dashboard);
 app.use('/maps', maps);
 app.use('/map', map);
-app.use('/users', users);
 app.use('/graphs', graphs);
 app.use('/controls', controls);
 app.use('/info', info);
